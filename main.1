@@ -1,0 +1,89 @@
+#include <iostream>
+
+class Date {
+private:
+    int day;
+    int month;
+    int year;
+
+public:
+    Date() : day(1), month(1), year(2000) {}
+
+    Date(int d, int m, int y) : day(d), month(m), year(y) {}
+
+    void incrementDay() {
+        day++;
+    }
+
+    Date operator++() {
+        incrementDay();
+        return *this;
+    }
+
+    Date operator--() {
+        day--;
+        return *this;
+    }
+
+    bool operator!=(const Date& other) const {
+        return (day != other.day) || (month != other.month) || (year != other.year);
+    }
+
+    bool operator==(const Date& other) const {
+        return (day == other.day) && (month == other.month) && (year == other.year);
+    }
+
+    bool operator>(const Date& other) const {
+        return (year > other.year) || ((year == other.year) && (month > other.month))
+            || ((year == other.year) && (month == other.month) && (day > other.day));
+    }
+
+    bool operator<(const Date& other) const {
+        return (year < other.year) || ((year == other.year) && (month < other.month))
+            || ((year == other.year) && (month == other.month) && (day < other.day));
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Date& date);
+
+    friend std::istream& operator>>(std::istream& is, Date& date);
+};
+
+std::ostream& operator<<(std::ostream& os, const Date& date) {
+    os << date.day << '/' << date.month << '/' << date.year;
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, Date& date) {
+    is >> date.day >> date.month >> date.year;
+    return is;
+}
+
+int main() {
+    Date today(7, 1, 2024);
+
+    ++today;
+    std::cout << today << std::endl;
+
+    --today;
+    std::cout << today << std::endl;
+
+    Date anotherDay(7, 1, 2024);
+    if (today == anotherDay) {
+        std::cout << "Equal" << std::endl;
+    }
+    else {
+        std::cout << "Not equal" << std::endl;
+    }
+
+    if (today > anotherDay) {
+        std::cout << "Today is later" << std::endl;
+    }
+    else if (today < anotherDay) {
+        std::cout << "Today is earlier" << std::endl;
+    }
+    else {
+        std::cout << "Today is equal" << std::endl;
+    }
+
+    return 0;
+}
